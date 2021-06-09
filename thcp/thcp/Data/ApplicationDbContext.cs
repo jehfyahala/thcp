@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using thcp.Models;
 
 namespace thcp.Data
 {
@@ -12,5 +13,7 @@ namespace thcp.Data
             : base(options)
         {
         }
+
+        public DbSet<Department> Departments { get; set; }
     }
 }
