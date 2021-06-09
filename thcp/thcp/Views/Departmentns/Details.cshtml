@@ -1,0 +1,26 @@
+﻿@model thcp.Models.Department
+
+@{
+    ViewData["Title"] = "Detalles";
+}
+
+<h1>Detalles</h1>
+
+<div>
+    <h4>Departamentos</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model=>model.DepartmentName)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.DepartmentName)
+        </dd>
+    </dl>
+</div>
+
+<div>
+    <!-- se cambia model puesto que es el lugar donde se encuentra el id -->
+    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@Model.DepartmetId">Editar</a>
+    <a asp-action="Index" class="btn btn-success">Regresar</a>
+</div>

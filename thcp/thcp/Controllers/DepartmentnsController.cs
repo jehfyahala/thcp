@@ -27,6 +27,23 @@ namespace thcp.Controllers
             return View(await db.Departments.ToListAsync());
         }
         //crear por medio de vista un formulario
+
+        //vista de departamentos en pocas palabras consultas
+        public async Task<IActionResult> Details(int? id)
+        {
+            if (id ==null)
+            {
+                return NotFound();
+            }
+            var depart = await db.Departments.FirstOrDefaultAsync(d=> d.DepartmetId==id);
+            if (depart==null)
+            {
+                return NotFound();
+            }
+            return View(depart);
+        }
+
+
         public IActionResult Create()
         {
             return View();
@@ -46,5 +63,50 @@ namespace thcp.Controllers
             }
             return View(department);
         }
+
+        //metodo de editar
+        public async Task<IActionResult> Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var depart = await db.Departments.FindAsync(id);
+            if (depart==null)
+            {
+                return NotFound();
+            }
+
+            return View(depart);
+        }
+
+        //guardar modificaciones en la dbf
+        [HttpPost]//metodo atraves de post
+        [ValidateAntiForgeryToken]//complementa la validacion en el metodo si es correcto y no venga codigo malicioso
+        public async Task<IActionResult> Edit(int id, Department depart)
+        {
+            if (id!=depart.DepartmetId)
+            {
+                return NotFound();
+            }
+            if (ModelState.IsValid)
+            {
+                try
+                {
+                    db.Update(depart);
+                    await db.SaveChangesAsync();
+                }
+                catch (DbUpdateConcurrencyException)
+                {
+                    return NotFound();
+                }
+
+                return RedirectToAction(nameof(Index));
+            }
+            return View(depart);
+        }
+        //fin editar
+        
+
     }
 }
