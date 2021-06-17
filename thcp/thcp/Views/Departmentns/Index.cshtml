@@ -6,10 +6,23 @@
 
 <h2>Lista de departamentos</h2>
 
-<p>
-    <a asp-action="Create" class="btn btn-success">Nuevo</a>
+<div class="row search">
+    <div class="col-auto">
+        <input type="text" class="form-control-plaintext" id="txt-search" value="" placeholder="Buscar...." />
+    </div>
+    <div class="col-auto">
+        <!-- capturar el valor de la caja de texto-->
+        <a class="btn btn-success" onclick="departments_search()" id="search-link"><i class="fas fa-search"></i></a>
+        <a asp-action="Create" class="btn btn-success"><i class="far fa-file"></i> Nuevo</a>
+    </div>
 
-    <table class="table">
+</div>
+
+
+<div class="table-responsive">
+
+
+    <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th>
@@ -22,16 +35,19 @@
         <tbody>
             @foreach (var item in Model)
             {
-            <tr>
-                <td>@Html.DisplayFor(modelItem => item.DepartmentName)</td>
-                <td>
-                    <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.DepartmetId">Editar</a>
-                    <a asp-action="Details" class="btn btn-success" asp-route-id="@item.DepartmetId">Detalles</a>
-                    <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.DepartmetId">Borrar</a>
-                </td>
-            </tr>
+                <tr>
+                    <td>@Html.DisplayFor(modelItem => item.DepartmentName)</td>
+                    <td>
+                        <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.DepartmetId"><i class="fas fa-edit"></i> Editar</a>
+                        <a asp-action="Details" class="btn btn-success" asp-route-id="@item.DepartmetId"><i class="far fa-file-alt"></i> Detalles</a>
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.DepartmetId"><i class="fas fa-trash-alt"></i> Borrar</a>
+                    </td>
+                </tr>
             }
         </tbody>
 
     </table>
-</p>
+
+</div>
+<link rel="stylesheet" href="~/css/common.css" />
+<script src="~/js/departments.js" asp-append-version="true"></script>

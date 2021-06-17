@@ -20,23 +20,32 @@ namespace thcp.Controllers
 
         //leer cualquier cosa de la base async hacer cualquier cosa mientras se ejecuta
         //IActionResult es una interfaz parte de entrada
-        public async Task<IActionResult> Index()
+        //nuevo codigo para buscar
+        public async Task<IActionResult> Index(string search)
         {
+            if (search==null)
+            {
+                return View(await db.Departments.ToListAsync());
+            }
             //devuelve todos los elementos de la tabla de departamentos
             //Devuelve el parametro para el metodo index
-            return View(await db.Departments.ToListAsync());
+            //cambio nuevo definimos una expresion landa para poder hacer las busquedas
+            return View(await db.Departments
+                .Where(d => d.DepartmentName.Contains(search))
+                
+                .ToListAsync());
         }
         //crear por medio de vista un formulario
 
         //vista de departamentos en pocas palabras consultas
         public async Task<IActionResult> Details(int? id)
         {
-            if (id ==null)
+            if (id == null)
             {
                 return NotFound();
             }
-            var depart = await db.Departments.FirstOrDefaultAsync(d=> d.DepartmetId==id);
-            if (depart==null)
+            var depart = await db.Departments.FirstOrDefaultAsync(d => d.DepartmetId == id);
+            if (depart == null)
             {
                 return NotFound();
             }
@@ -72,7 +81,7 @@ namespace thcp.Controllers
                 return NotFound();
             }
             var depart = await db.Departments.FindAsync(id);
-            if (depart==null)
+            if (depart == null)
             {
                 return NotFound();
             }
@@ -85,7 +94,7 @@ namespace thcp.Controllers
         [ValidateAntiForgeryToken]//complementa la validacion en el metodo si es correcto y no venga codigo malicioso
         public async Task<IActionResult> Edit(int id, Department depart)
         {
-            if (id!=depart.DepartmetId)
+            if (id != depart.DepartmetId)
             {
                 return NotFound();
             }
@@ -106,7 +115,34 @@ namespace thcp.Controllers
             return View(depart);
         }
         //fin editar
-        
+        //borrar metodo final
+        public async Task<IActionResult> Delete(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var depart = await db.Departments.FirstOrDefaultAsync(d => d.DepartmetId == id);
+            //buscar en la tabla de departamentos y quedara en depart
+            if (depart == null)
+            {
+                return NotFound();
+            }
+
+            return View(depart);
+        }
+        //inicio borrar
+        [HttpPost, ActionName("Delete")]//metodo atraves de post, el metodo hace el llamado
+        [ValidateAntiForgeryToken]//complementa la validacion en el metodo si es correcto y no venga codigo malicioso
+        public async Task<IActionResult> Delete(int id)
+        {
+            var depart = await db.Departments.FindAsync(id);
+            db.Departments.Remove(depart);
+            await db.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+        //fin borrar
+
 
     }
 }
