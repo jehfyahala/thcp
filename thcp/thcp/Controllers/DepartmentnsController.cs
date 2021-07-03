@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using thcp.Common;
 using thcp.Data;
 using thcp.Models;
 
@@ -11,7 +12,14 @@ namespace thcp.Controllers
 {
     public class DepartmentnsController : Controller
     {
+        //new cod secund partial
+        //var
+        private readonly int RecordsPerPage = 10;
         private readonly ApplicationDbContext db;
+
+        private Pagination<Department> PaginationDepartments;
+        //la busqueda se trabaja sobre el index con el nuevo parametro opcional
+
 
         public DepartmentnsController(ApplicationDbContext db)
         {
@@ -21,19 +29,58 @@ namespace thcp.Controllers
         //leer cualquier cosa de la base async hacer cualquier cosa mientras se ejecuta
         //IActionResult es una interfaz parte de entrada
         //nuevo codigo para buscar
-        public async Task<IActionResult> Index(string search)
+        //parametro opcional debe ir al final
+        //revisar este codigo Departmentns
+        [Route("/Departments")]
+        [Route("/Departments/{search}")]
+        [Route("/Departments/{search}/{page}")]
+        //fin de codigo a revisar
+        public async Task<IActionResult> Index(string search, int page=1)
         {
+
+            //modificacion
+            int totalRecords = 0;
             if (search==null)
             {
-                return View(await db.Departments.ToListAsync());
+                //modificacion1
+
+                search = "";
             }
+            //obtener registros totales
+            totalRecords = await db.Departments.CountAsync(
+            //expresion landa
+            d=>d.DepartmentName.Contains(search));
+
+            //obtener datos
+            var departments = await db.Departments
+                .Where(d=>d.DepartmentName.Contains(search)).ToListAsync();
+
+            //paginar
+            var departmentsResult = departments.OrderBy(o => o.DepartmentName)
+                .Skip((page - 1) * RecordsPerPage)
+                .Take(RecordsPerPage);
+            //calculo de las paginas
+            var totalPages = (int)Math.Ceiling((double)totalRecords / RecordsPerPage);
+
+            //instanciar paginacion
+
+            PaginationDepartments = new Pagination<Department>() 
+            {
+                RecordPerPage = this.RecordsPerPage,
+                TotalRecords=totalRecords,
+                TotalPage=totalPages,
+                CurrentPage =page,
+                Search=search,
+                Result=departmentsResult
+            };
+
+
+            //fin paginar
             //devuelve todos los elementos de la tabla de departamentos
             //Devuelve el parametro para el metodo index
             //cambio nuevo definimos una expresion landa para poder hacer las busquedas
-            return View(await db.Departments
-                .Where(d => d.DepartmentName.Contains(search))
-                
-                .ToListAsync());
+            //envio nuevo modelo
+            return View(PaginationDepartments);
         }
         //crear por medio de vista un formulario
 

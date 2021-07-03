@@ -15,5 +15,9 @@ namespace thcp.Data
         }
 
         public DbSet<Department> Departments { get; set; }
+
+        public DbSet<thcp.Models.Position> Position { get; set; }
+
+        public DbSet<thcp.Models.Employee> Employee { get; set; }
     }
 }

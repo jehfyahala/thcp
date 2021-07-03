@@ -1,55 +1,55 @@
-﻿@model thcp.Common.Pagination<Department>
+﻿<!-- index de puestos-->
+@model thcp.Common.Pagination<Position>
 
 @{
-    ViewData["Title"] = "Departamentos";
+    ViewData["Title"] = "Puesto de trabajo";
 }
 
-<h2>Lista de departamentos</h2>
+<h2>Puesto de trabajo</h2>
 
 <div class="row search">
     <div class="col-auto">
-        <input type="text" class="form-control-plaintext" id="txt-search" placeholder="Buscar..." />
+        <input type="text" class="form-control-plaintext" id="txt-search-positions" placeholder="Buscar..." />
     </div>
     <div class="col-auto">
         <!-- capturar el valor de la caja de texto-->
-        <a class="btn btn-success" onclick="departments_search()" id="search-link"><i class="fas fa-search"></i></a>
+        <a class="btn btn-success" onclick="positions_search()" id="search-link"><i class="fas fa-search"></i></a>
         <a asp-action="Create" class="btn btn-success"><i class="far fa-file"></i> Nuevo</a>
     </div>
 
 </div>
 
-
 <div class="table-responsive">
-
-
     <table class="table table-bordered table-hover">
         <thead>
             <tr>
                 <th>
-                    <!-- ryzer notaciones en lenguaje C# en HTML nuevo codigo aqui abajo-->
-                    @Html.DisplayNameFor(model => model.Result.SingleOrDefault().DepartmentName)
+                    @Html.DisplayNameFor(model => model.Result.SingleOrDefault().Description)
                 </th>
                 <th></th>
             </tr>
         </thead>
         <tbody>
-            <!-- model.result nueva modificacion-->
             @foreach (var item in Model.Result)
             {
                 <tr>
-                    <td>@Html.DisplayFor(modelItem => item.DepartmentName)</td>
                     <td>
-                        <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.DepartmetId"><i class="fas fa-edit"></i> Editar</a>
-                        <a asp-action="Details" class="btn btn-success" asp-route-id="@item.DepartmetId"><i class="far fa-file-alt"></i> Detalles</a>
-                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.DepartmetId"><i class="fas fa-trash-alt"></i> Borrar</a>
+                        @Html.DisplayFor(modelItem => item.Description)
+                    </td>
+                    <td>
+
+                        <a asp-action="Edit" class="btn btn-warning" asp-route-id="@item.PositionId"><i class="fas fa-edit"></i> Editar</a>
+                        <a asp-action="Details" class="btn btn-success" asp-route-id="@item.PositionId"><i class="far fa-file-alt"></i> Detalles</a>
+                        <a asp-action="Delete" class="btn btn-danger" asp-route-id="@item.PositionId"><i class="fas fa-trash-alt"></i> Borrar</a>
+
+
                     </td>
                 </tr>
             }
         </tbody>
-
     </table>
-
 </div>
+
 
 @*Codigo para paginar registros*@
 @if (Model.Result.Count() > 0)
@@ -109,13 +109,14 @@ else
 }
 else
 {
-    @Html.ActionLink("Siguiente", "Index", new { Page = Model.CurrentPage-1, Search = Model.Search },
+    @Html.ActionLink("Siguiente", "Index", new { Page = Model.CurrentPage - 1, Search = Model.Search },
        new { @class = "btn btn-sm brn-default disabled" }
     )
-   <span></span>
+    <span></span>
     @Html.ActionLink(">>", "Index", new { Page = Model.TotalPage, Search = Model.Search },
         new { @class = "btn btn-sm brn-default disabled" }
     )
 }
+
 <link rel="stylesheet" href="~/css/common.css" />
-<script src="~/js/departments.js" asp-append-version="true"></script>
+<script src="~/js/positions.js" asp-append-version="true"></script>

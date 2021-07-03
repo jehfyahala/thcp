@@ -1,0 +1,35 @@
+﻿@model thcp.Models.Position
+
+@{
+    ViewData["Title"] = "Borrar puesto de trabajo";
+}
+
+<h2>Borrar puesto de trabajo</h2>
+
+<h3>Está completamente seguro de eliminar este puesto?</h3>
+<div>
+    <h4>Puesto</h4>
+    <hr />
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Description)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Description)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Department.DepartmentName)
+        </dt>
+        <dd class="col-sm-10">
+
+            @Html.DisplayFor(model => model.Department.DepartmentName)
+            <select asp-for="DepartmetId" class="form-control" asp-items="ViewBag.DepartmetId" disabled></select>
+        </dd>
+    </dl>
+    
+    <form asp-action="Delete">
+        <input type="hidden" asp-for="PositionId" />
+        <input type="submit" value="Borrar" class="btn btn-danger" />
+        <a asp-action="Index" class="btn btn-success">Regresar</a>
+    </form>
+</div>
